@@ -1,0 +1,31 @@
+{% extends 'base.html' %} 
+{% block title %}{{ blogpost.title }} - {{ block.super }}{% endblock title %} 
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <!-- Blog Entries Column -->
+        <div class="col-md-12 mt-3 left">
+            <div class="card mb-4">
+                <div class="card-body">
+                  <h1>{{ blogpost.title }}</h1>
+                  <p class="card-text text-muted h6">Posted by <a href="{% url 'user' blogpost.author %}"><b>{{ blogpost.author }}</b></a> on {{ blogpost.created_on|date:"d.m.Y H:i" }} ({{ blogpost.created_on|timesince }} ago)
+                    {% if blogpost.created_on != blogpost.updated_on %}
+                      <i>(edited {{ blogpost.updated_on|date:"d.m.Y H:i" }})</i>
+                    {% endif %}</p>
+                    <p class="card-text text-muted h6">Category: <a href="{{ blogpost.category.get_absolute_url }}"><b>{{ blogpost.category.title }}</b></a></p>
+                    {% if blogpost.tags.exists %}
+                      <p class="card-text text-muted h6">Tags:
+                        {% for tag in blogpost.tags.all %}
+                          <a href="{{ tag.get_absolute_url }}" class="badge badge-primary">{{ tag.title }}</a>
+                        {% endfor %}
+                      </p>
+                    {% endif %}
+                    <hr>
+                  <p class="card-text ">{{ blogpost.text_full | safe }}</p>
+                </div>
+            </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
